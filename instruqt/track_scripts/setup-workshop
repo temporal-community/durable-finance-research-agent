@@ -1,0 +1,8 @@
+#!/bin/bash
+# ABOUTME: Track-level setup. Runs once when the attendee enters the track.
+# Thin: the shared bootstrap stages the code, mints the LLM key and starts the stack.
+# Every challenge setup calls the same script, because Instruqt's per-challenge Preview skips this file.
+set -euo pipefail
+
+/opt/bootstrap-workshop.sh
+echo "==> Track setup complete."

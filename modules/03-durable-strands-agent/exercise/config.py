@@ -1,0 +1,1 @@
+TASK_QUEUE = "finance-research-tq"

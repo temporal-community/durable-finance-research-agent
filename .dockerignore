@@ -1,0 +1,11 @@
+.venv
+.run
+.git
+.claude
+reference
+docs
+instruqt
+**/__pycache__
+**/.pytest_cache
+**/published
+.env

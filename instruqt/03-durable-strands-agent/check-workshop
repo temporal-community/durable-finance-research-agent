@@ -1,0 +1,23 @@
+#!/bin/bash
+# ABOUTME: Check script. Fill-in-the-blanks style. Tests pass, and one memo went through approval end to end.
+source /root/.bashrc
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+cd /root/workshop/modules/03-durable-strands-agent/exercise || fail "Exercise folder is missing."
+
+if ! python -m pytest -q > /tmp/check-03.log 2>&1; then
+    tail -25 /tmp/check-03.log
+    fail "Tests fail. Uncomment the code under TODO 1 (activities.py), TODO 2 and TODO 3 (workflow.py)."
+fi
+pass "Error classification, approval gate and idempotent publish all work"
+
+DONE=$(temporal workflow list --address 127.0.0.1:7233 \
+    --query 'TaskQueue="finance-research-tq" AND ExecutionStatus="Completed"' --output json 2>/dev/null | jq 'length' 2>/dev/null || echo 0)
+if [ "${DONE:-0}" -lt 1 ]; then
+    fail "No completed research Workflow yet. Start the worker, run just start, then approve the memo."
+fi
+if ! ls /root/workshop/modules/03-durable-strands-agent/exercise/published/*.md >/dev/null 2>&1; then
+    fail "No memo was published. Approve one (not reject, not timeout) and check again."
+fi
+pass "A memo went through approval and was published"

@@ -1,0 +1,51 @@
+# One-repo layout: the track, the course code and the sandbox all live at the repo root (track_dir ".").
+#
+# - tests: offline pytest for every solution, and every exercise with its TODOs uncommented. No secrets.
+# - ci: builds and pushes the sandbox image to Docker Hub when sandbox or course code changes. Pushing the Instruqt track
+#   is MANUAL only (workflow_dispatch), so a merge never publishes a track by itself.
+#
+# Repo secrets needed once: DOCKERHUB_USERNAME and DOCKERHUB_TOKEN (Docker Hub access token with write access to the
+# image repo), and INSTRUQT_TOKEN (org API key) for manual track pushes.
+name: Build and publish
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "sandbox/**"
+      - "modules/**"
+      - "shared/**"
+      - "scripts/**"
+      - "pyproject.toml"
+      - "uv.lock"
+      - ".github/workflows/**"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --frozen
+      - name: Solutions pass
+        run: |
+          for m in modules/*/solution; do (cd "$m" && uv run --project ../../.. python -m pytest -q); done
+      - name: Exercises go green once their TODOs are uncommented
+        run: uv run python scripts/check_exercises.py .
+
+  ci:
+    needs: tests
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+    uses: ./.github/workflows/_track-ci.yml
+    with:
+      track_dir: "."
+      image: trainwithshubham/durable-finance-research-agent-sandbox
+      build_image: true
+      push_track: ${{ github.event_name == 'workflow_dispatch' }}
+    secrets: inherit

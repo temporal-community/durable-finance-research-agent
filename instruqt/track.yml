@@ -1,0 +1,48 @@
+slug: durable-finance-research-agent
+id: adwj5azscby9
+title: Durable Finance Research Agent with Strands and Temporal
+teaser: Build a finance research agent with Strands, then make it survive crashes,
+  flaky APIs and a slow human.
+description: |-
+  A research agent fans out to market data, filings and news, drafts a memo, and waits for a person to approve it.
+  All data is sample data. Nothing here is financial advice.
+
+  1. Build a simple Strands agent that talks to an LLM through a gateway.
+  2. Give it finance tools and a research brief. Break the network and watch it fail.
+  3. Run it as a Temporal Workflow. Cut the network, kill the worker, wait on a human, and lose nothing.
+icon: ""
+tags:
+- ai-agents
+- python
+- strands
+- temporal
+owner: temporal
+developers:
+- shubham.londhe@temporal.io
+maintenance: true
+idle_timeout: 900
+timelimit: 5400
+lab_config:
+  extend_ttl: 900
+  sidebar_enabled: true
+  feedback_recap_enabled: true
+  feedback_tab_enabled: true
+  loadingMessages:
+  - Starting the Temporal dev server...
+  - Minting your LLM key...
+  - Starting the mock market data API...
+  - Warming the network control panel...
+  - Preparing the research desk...
+  - Opening the code editor...
+  - Staging your exercise files...
+  - Loading the Temporal Web UI...
+  - Checking the proxy...
+  - Almost ready...
+  theme:
+    name: modern-dark
+  override_challenge_layout: true
+  hideStopButton: false
+  default_layout: AssignmentLeft
+  default_layout_sidebar_size: 33
+checksum: "9192342163741391471"
+enhanced_loading: false

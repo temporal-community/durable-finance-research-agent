@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Research Desk</title>
+<style>
+:root{
+  --bg:#f3f1ec; --panel:#fffdf8; --ink:#1d1b16; --muted:#7a756a; --line:#e3ded2; --term:#14130f; --termink:#e9e4d6;
+  --ok:#1f8a4c; --bad:#c8362b; --warn:#b7791f; --accent:#444CE7; --shadow:0 1px 0 #fff inset,0 8px 24px -14px #1d1b1640;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:"Avenir Next","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#13120f; --panel:#1b1a16; --ink:#ece8dc; --muted:#8f8a7c; --line:#2d2b24; --term:#0c0b09;
+  --ok:#4ade80; --bad:#ff6b5e; --warn:#fbbf24; --accent:#8b93ff; --shadow:0 1px 0 #ffffff0a inset,0 12px 28px -16px #000;
+}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font:15px/1.5 var(--sans);
+  background:radial-gradient(900px 420px at 10% -10%,#444CE71a,transparent 60%),var(--bg)}
+main{max-width:860px;margin:0 auto;padding:26px 18px 56px}
+header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{margin:0;font:700 22px/1.1 var(--sans);letter-spacing:-.01em}
+h1 small{font:600 11px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-left:10px}
+.badge{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line);padding:3px 9px;border-radius:99px;color:var(--muted)}
+.notice{margin:14px 0 18px;padding:9px 14px;border:1px dashed var(--warn);border-radius:10px;font-size:13px;color:var(--muted)}
+.notice b{color:var(--warn);font-family:var(--mono);font-size:11px;letter-spacing:.1em}
+.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.mod{text-align:left;font:inherit;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.mod:hover{transform:translateY(-1px)}
+.mod b{display:block;font-size:14px}.mod span{font-size:12px;color:var(--muted)}
+.mod i{font:700 11px var(--mono);color:var(--accent);font-style:normal;display:block;margin-bottom:2px}
+.mod[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 2px #444CE733,var(--shadow)}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px}
+textarea{width:100%;font:14px/1.5 var(--mono);color:var(--ink);background:transparent;border:1px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.chip{font:600 12px var(--mono);border:1px solid var(--line);background:transparent;color:var(--muted);padding:5px 10px;border-radius:99px;cursor:pointer}
+.chip:hover{color:var(--ink);border-color:var(--ink)}
+.spacer{flex:1}
+button.run{font:700 14px var(--sans);background:var(--ink);color:var(--bg);border:0;border-radius:10px;padding:9px 20px;cursor:pointer;display:inline-flex;align-items:center;gap:8px}
+button.run:disabled{opacity:.6;cursor:progress}
+button.run kbd{font:600 10px var(--mono);opacity:.6;border:1px solid currentColor;border-radius:4px;padding:0 4px}
+a.ext{font-size:13px;color:var(--accent);text-decoration:none}a.ext:hover{text-decoration:underline}
+button:focus-visible,.mod:focus-visible,.chip:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+pre.term{margin:14px 0 0;background:var(--term);color:var(--termink);border-radius:12px;padding:14px 16px;font:13px/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;min-height:90px;max-height:420px;overflow:auto}
+pre.term::before{content:"output";display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#8f8a7c;margin-bottom:6px}
+.spin{width:12px;height:12px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#wf{display:grid;gap:10px;margin-top:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:12px 14px;animation:rise .3s both}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}}
+.card .top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.card code{font:600 13px var(--mono)}
+.pill{font:700 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--muted)}
+.pill.researching,.pill.starting{color:var(--accent)}
+.pill.awaiting_approval{color:var(--warn);border-color:var(--warn);animation:pulse 1.6s infinite}
+.pill.published,.pill.already-published{color:var(--ok);border-color:var(--ok)}
+.pill.rejected,.pill.escalated{color:var(--bad);border-color:var(--bad)}
+@keyframes pulse{50%{box-shadow:0 0 0 4px #b7791f22}}
+.btns{margin-left:auto;display:flex;gap:8px}
+.btns button{font:700 12px var(--sans);border-radius:8px;padding:6px 14px;cursor:pointer;border:1px solid}
+.btns .yes{background:var(--ok);border-color:var(--ok);color:#fff}
+.btns .no{background:transparent;border-color:var(--bad);color:var(--bad)}
+.card pre{margin:10px 0 0;font:13px/1.55 var(--mono);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink);background:var(--bg);border-radius:8px;padding:10px 12px;max-height:260px;overflow:auto}
+.hint{color:var(--muted);font-size:13px;margin:14px 2px 0}
+@media (max-width:640px){.mods{grid-template-columns:1fr}.btns{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Research Desk<small>Ledger Capital</small></h1>
+    <span class="badge" id="variant">exercise</span>
+  </header>
+  <div class="notice"><b>SAMPLE DATA</b> &nbsp;Fictional companies (ACME, GLBX, INIT). Not financial advice.</div>
+
+  <div class="mods" role="group" aria-label="Module">
+    <button class="mod" id="t1" aria-pressed="true" onclick="pick(1)"><i>01</i><b>Basic agent</b><span>Model, prompt, one tool</span></button>
+    <button class="mod" id="t2" aria-pressed="false" onclick="pick(2)"><i>02</i><b>Finance agent</b><span>Quote, filings, news, memo</span></button>
+    <button class="mod" id="t3" aria-pressed="false" onclick="pick(3)"><i>03</i><b>Durable agent</b><span>Workflow with human approval</span></button>
+  </div>
+
+  <div class="box">
+    <textarea id="prompt" rows="3" aria-label="Prompt"></textarea>
+    <div class="row">
+      <span id="chips"></span>
+      <span class="spacer"></span>
+      <a class="ext" id="tlink" href="#" target="_blank" rel="noopener">Temporal UI</a>
+      <button class="run" id="go" onclick="run()">Run <kbd>Ctrl+Enter</kbd></button>
+    </div>
+    <pre class="term" id="out">Pick a module and press Run.</pre>
+  </div>
+
+  <div id="wf"></div>
+  <p class="hint" id="hint"></p>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const PROMPTS = {
+  1: ['Price moved from 98.2 to 112.4. What is the percent change?'],
+  2: ['Write a research memo on ACME.', 'Write a research memo on GLBX.', 'Write a research memo on INIT.', 'Write a research memo on ZZZZ.'],
+  3: ['Write a research memo on ACME.', 'Write a research memo on GLBX.', 'Write a research memo on INIT.', 'Write a research memo on ZZZZ.']
+};
+const HINTS = {1: 'Runs your module 1 agent once. Cut the LLM in the Network Control Panel and run it again.',
+  2: 'Runs your module 2 agent once. It calls three data tools, then writes the memo.',
+  3: 'Starts a Workflow. It waits here for you to approve or reject the memo.'};
+let mod = 1, ids = [];
+try { ids = JSON.parse(sessionStorage.getItem('ids') || '[]'); } catch (e) {}
+
+function esc(s) { return String(s).replace(/[&<>]/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c])); }
+function pick(n) {
+  mod = n;
+  [1, 2, 3].forEach(i => $('t' + i).setAttribute('aria-pressed', i === n));
+  $('prompt').value = PROMPTS[n][0];
+  $('chips').innerHTML = PROMPTS[n].map((p, i) => `<button class="chip" onclick="setPrompt(${i})">${esc(p.replace('Write a research memo on ', '').replace(/^Price moved.*/, 'percent change'))}</button>`).join(' ');
+  $('hint').textContent = HINTS[n];
+  $('wf').style.display = n === 3 ? '' : 'none';
+  $('out').style.display = n === 3 && ids.length ? 'none' : '';
+  refresh();
+}
+function setPrompt(i) { $('prompt').value = PROMPTS[mod][i]; }
+
+async function run() {
+  const go = $('go');
+  go.disabled = true; go.innerHTML = '<span class="spin"></span> Running';
+  $('out').style.display = ''; $('out').textContent = 'Running...';
+  try {
+    const r = await fetch('/api/run', {method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({module: mod, prompt: $('prompt').value})});
+    const j = await r.json();
+    if (!r.ok) { $('out').textContent = j.detail || 'Error'; return; }
+    if (j.workflow_id) {
+      ids.unshift(j.workflow_id); sessionStorage.setItem('ids', JSON.stringify(ids));
+      $('out').textContent = 'Started ' + j.workflow_id + '. Start your worker if it is not running. Watch the card below.';
+      refresh();
+    } else $('out').textContent = j.output || '(no output)';
+  } catch (e) { $('out').textContent = 'Could not reach the Research Desk API: ' + e; }
+  finally { go.disabled = false; go.innerHTML = 'Run <kbd>Ctrl+Enter</kbd>'; }
+}
+async function act(id, a) { await fetch(`/api/workflow/${id}/${a}`, {method: 'POST'}); refresh(); }
+async function refresh() {
+  if (mod !== 3 || !ids.length) { $('wf').innerHTML = ''; return; }
+  const rows = await Promise.all(ids.slice(0, 5).map(id => fetch('/api/workflow/' + id).then(r => r.json()).catch(() => ({workflow_id: id, status: 'unreachable'}))));
+  $('wf').innerHTML = rows.map(w => {
+    const st = w.status || w.run_status || '';
+    return `<div class="card"><div class="top"><code>${esc(w.workflow_id)}</code><span class="pill ${esc(st)}">${esc(st.replace('_', ' '))}</span>
+      ${w.link ? `<a class="ext" href="${esc(w.link)}" target="_blank" rel="noopener">history</a>` : ''}
+      ${st === 'awaiting_approval' ? `<span class="btns"><button class="yes" onclick="act('${esc(w.workflow_id)}','approve')">Approve</button><button class="no" onclick="act('${esc(w.workflow_id)}','reject')">Reject</button></span>` : ''}</div>
+      ${w.memo ? `<pre>${esc(w.memo)}</pre>` : ''}</div>`;
+  }).join('');
+}
+$('prompt').addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') run(); });
+fetch('/api/config').then(r => r.json()).then(c => {
+  $('variant').textContent = c.variant;
+  c.temporal_ui ? $('tlink').href = c.temporal_ui : $('tlink').remove();
+});
+pick(1); setInterval(refresh, 3000);
+</script>
+</body>
+</html>

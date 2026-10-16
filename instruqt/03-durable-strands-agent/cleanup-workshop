@@ -1,0 +1,7 @@
+#!/bin/bash
+# ABOUTME: Per-challenge cleanup. Stop the worker and put the network panel back to normal.
+set -euo pipefail
+pkill -f "worker.py" || true
+curl -s -X POST localhost:5050/api/llm -H 'content-type: application/json' -d '{"enabled": true}' || true
+curl -s -X POST localhost:5050/api/kill_all -H 'content-type: application/json' -d '{"enabled": false}' || true
+curl -s -X POST localhost:5050/api/market_data -H 'content-type: application/json' -d '{"mode": "ok"}' || true

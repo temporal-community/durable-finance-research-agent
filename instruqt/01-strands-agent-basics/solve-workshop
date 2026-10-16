@@ -1,0 +1,9 @@
+#!/bin/bash
+# ABOUTME: Solve script. Mimics a learner finishing module 1. Runs on Skip and `instruqt track test`.
+set -euxo pipefail
+set +x
+source /root/.bashrc
+set -x
+
+M=modules/01-strands-agent-basics
+cp -rf "/opt/workshop/$M/solution/." "/root/workshop/$M/exercise/"

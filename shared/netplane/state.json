@@ -1,0 +1,6 @@
+{
+  "kill_all": false,
+  "services": {
+    "llm": true
+  }
+}

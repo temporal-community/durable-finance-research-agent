@@ -1,0 +1,38 @@
+#!/bin/bash
+# ABOUTME: Solve script. Mimics a learner finishing module 3: solution code, one approved memo.
+set -euxo pipefail
+set +x
+source /root/.bashrc
+set -x
+
+M=modules/03-durable-strands-agent
+cp -rf "/opt/workshop/$M/solution/." "/root/workshop/$M/exercise/"
+cd "/root/workshop/$M/exercise"
+
+pkill -f "worker.py" || true
+sleep 1
+nohup python worker.py > /tmp/worker-solve.log 2>&1 &
+WORKER_PID=$!
+sleep 8
+
+WF=$(python start.py "Write a research memo on ACME." | awk '/^Started/ {print $2}')
+
+# Wait for the memo to reach review, approve it, wait for completion.
+REVIEWED=""
+for _ in $(seq 1 90); do
+    REVIEWED=$(temporal workflow query --address 127.0.0.1:7233 -w "$WF" --type status 2>/dev/null | grep -o 'awaiting_approval' || true)
+    [ -n "$REVIEWED" ] && break
+    sleep 2
+done
+[ -n "$REVIEWED" ] || { echo "ERROR: $WF never reached awaiting_approval" >&2; exit 1; }
+python decide.py approve "$WF"
+RUN=""
+for _ in $(seq 1 30); do
+    RUN=$(temporal workflow describe --address 127.0.0.1:7233 -w "$WF" --output json 2>/dev/null | jq -r '.workflowExecutionInfo.status' || true)
+    [ "$RUN" = "WORKFLOW_EXECUTION_STATUS_COMPLETED" ] && break
+    sleep 1
+done
+
+kill "$WORKER_PID" 2>/dev/null || true
+wait "$WORKER_PID" 2>/dev/null || true
+[ "$RUN" = "WORKFLOW_EXECUTION_STATUS_COMPLETED" ] || { echo "ERROR: $WF did not complete (last status: $RUN)" >&2; exit 1; }

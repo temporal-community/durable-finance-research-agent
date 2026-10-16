@@ -1,0 +1,26 @@
+# Self-paced Docker path. Same image as Instruqt, built for your machine's architecture.
+# Your repo is mounted at /root/workshop, so you edit locally and run inside the container.
+#   just up-docker                       # build and start the stack
+#   docker compose exec workshop bash    # then: just m1 "hi"   just worker   just start "memo on ACME"
+# Needs .env (copy .env.example). Do not run this and `just up` at the same time: they share ports and .run/.
+services:
+  workshop:
+    build:
+      context: .
+      dockerfile: sandbox/Dockerfile
+    image: durable-finance-research-agent-sandbox
+    env_file: .env
+    environment:
+      BIND_HOST: 0.0.0.0
+      TEMPORAL_ADDRESS: 127.0.0.1:7233
+      UV_PROJECT_ENVIRONMENT: /opt/workshop/.venv
+      UV_NO_SYNC: "1"
+      PATH: /opt/workshop/.venv/bin:/root/.temporalio/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    working_dir: /root/workshop
+    volumes:
+      - .:/root/workshop
+    ports:
+      - "127.0.0.1:8000:8000"   # test UI
+      - "127.0.0.1:5050:5050"   # network control panel
+      - "127.0.0.1:8233:8233"   # Temporal UI
+    command: ["bash", "-c", "rm -rf .run && uv run python scripts/dev.py up && exec sleep infinity"]

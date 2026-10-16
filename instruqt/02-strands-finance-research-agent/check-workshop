@@ -1,0 +1,13 @@
+#!/bin/bash
+# ABOUTME: Check script. Fill-in-the-blanks style. The module's offline tests must pass (no LLM needed).
+source /root/.bashrc
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+cd /root/workshop/modules/02-strands-finance-research-agent/exercise || fail "Exercise folder is missing."
+
+if ! python -m pytest -q > /tmp/check-02.log 2>&1; then
+    tail -20 /tmp/check-02.log
+    fail "Tests fail. Uncomment the code under TODO 1, 2 and 3 (tools.py and agent.py)."
+fi
+pass "Tools, system prompt and agent are wired"

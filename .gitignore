@@ -1,0 +1,25 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+*.remote
+node_modules/
+# Instruqt authoring scratch files (validate-track.sh checks these are ignored)
+commit-msg.md
+prompt.md
+review.md
+# Runtime state written by the sandbox / local runs
+*.db
+ledger.json
+.env
+.run/
+published/
+# Internal authoring files, not part of the public workshop
+CLAUDE.md
+PLAN.md
+DECISIONS.md
+.claude/
+.mcp.json
+reference/
+docs/

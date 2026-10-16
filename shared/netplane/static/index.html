@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Network Control Panel</title>
+<style>
+:root{
+  --bg:#f3f1ec; --panel:#fffdf8; --ink:#1d1b16; --muted:#7a756a; --line:#e3ded2;
+  --ok:#1f8a4c; --bad:#c8362b; --warn:#b7791f; --accent:#444CE7; --shadow:0 1px 0 #fff inset,0 8px 24px -12px #1d1b1640;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,monospace;
+  --sans:"Avenir Next","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#13120f; --panel:#1b1a16; --ink:#ece8dc; --muted:#8f8a7c; --line:#2d2b24;
+  --ok:#4ade80; --bad:#ff6b5e; --warn:#fbbf24; --accent:#8b93ff; --shadow:0 1px 0 #ffffff0a inset,0 12px 28px -14px #000;
+}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);font:15px/1.5 var(--sans);
+  background:radial-gradient(900px 400px at 85% -10%,#444CE71a,transparent 60%),var(--bg)}
+main{max-width:720px;margin:0 auto;padding:28px 18px 48px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+h1{font:600 13px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;margin:0;display:flex;align-items:center;gap:10px}
+.led{width:9px;height:9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px #1f8a4c26,0 0 12px var(--ok)}
+.led.bad{background:var(--bad);box-shadow:0 0 0 3px #c8362b26,0 0 12px var(--bad)}
+.sub{color:var(--muted);font-size:13px;margin:0 0 22px}
+.wire{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:14px 16px;margin-bottom:16px}
+.wire svg{width:100%;height:auto;display:block}
+.wire text{font:600 10.5px var(--mono);fill:var(--muted);letter-spacing:.06em}
+.node{fill:var(--bg);stroke:var(--line);stroke-width:1.5}
+.link{stroke:var(--ok);stroke-width:2;fill:none;transition:stroke .25s}
+.link.bad{stroke:var(--bad);stroke-dasharray:3 5}
+.link.warn{stroke:var(--warn);stroke-dasharray:10 5}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);padding:16px 18px;margin-bottom:12px;
+  display:grid;grid-template-columns:1fr auto;gap:4px 16px;align-items:center;animation:rise .35s both}
+.card:nth-of-type(2){animation-delay:.05s}.card:nth-of-type(3){animation-delay:.1s}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}}
+.card h2{margin:0;font-size:15px;font-weight:650}
+.card p{margin:0;color:var(--muted);font-size:13px;grid-column:1}
+.pill{font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border-radius:99px;border:1px solid var(--line);color:var(--ok);margin-left:8px;vertical-align:1px}
+.pill.bad{color:var(--bad)}.pill.warn{color:var(--warn)}
+.switch{position:relative;width:54px;height:30px;border-radius:99px;border:1px solid var(--line);background:var(--bad);cursor:pointer;transition:background .2s;padding:0}
+.switch[aria-checked=true]{background:var(--ok)}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0004;transition:transform .2s}
+.switch[aria-checked=true]::after{transform:translateX(24px)}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.seg button{font:600 12px var(--mono);padding:8px 12px;border:0;background:transparent;color:var(--muted);cursor:pointer;border-right:1px solid var(--line)}
+.seg button:last-child{border:0}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--bg)}
+.seg button[aria-pressed=true].bad{background:var(--bad);color:#fff}
+.seg button[aria-pressed=true].warn{background:var(--warn);color:#1d1b16}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.danger{border-color:#c8362b55}
+.danger .switch{background:var(--line)}.danger .switch[aria-checked=true]{background:var(--bad)}
+footer{color:var(--muted);font-size:12px;text-align:center;margin-top:22px}
+@media (max-width:520px){.card{grid-template-columns:1fr}.seg{justify-self:start}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <header><h1><span class="led" id="led"></span>Network control panel</h1></header>
+  <p class="sub">Break the network under your agent, then put it back. Sample data workshop, your sandbox only.</p>
+
+  <div class="wire" aria-hidden="true">
+    <svg viewBox="0 0 640 120">
+      <rect class="node" x="10" y="40" width="120" height="40" rx="8"/><text x="70" y="64" text-anchor="middle">YOUR AGENT</text>
+      <rect class="node" x="250" y="40" width="120" height="40" rx="8"/><text x="310" y="64" text-anchor="middle">PROXY :8888</text>
+      <rect class="node" x="510" y="8" width="120" height="40" rx="8"/><text x="570" y="32" text-anchor="middle">LLM GATEWAY</text>
+      <rect class="node" x="510" y="72" width="120" height="40" rx="8"/><text x="570" y="96" text-anchor="middle">MARKET DATA</text>
+      <path id="l0" class="link" d="M130 60H250"/>
+      <path id="l1" class="link" d="M370 60C440 60 440 28 510 28"/>
+      <path id="l2" class="link" d="M130 60V100H510"/>
+    </svg>
+  </div>
+
+  <section class="card" id="c-llm">
+    <h2>LLM gateway <span class="pill" id="p-llm">allowed</span></h2>
+    <button class="switch" id="s-llm" role="switch" aria-label="LLM gateway" aria-checked="true"></button>
+    <p>The proxy answers 503 for the LiteLLM host when this is off. Agents see a ServiceUnavailableError.</p>
+  </section>
+
+  <section class="card" id="c-md">
+    <h2>Market data API <span class="pill" id="p-md">ok</span></h2>
+    <div class="seg" role="group" aria-label="Market data mode">
+      <button data-m="ok" aria-pressed="true">ok</button>
+      <button data-m="unavailable" class="bad" aria-pressed="false">503</button>
+      <button data-m="rate_limited" class="warn" aria-pressed="false">429</button>
+    </div>
+    <p>503 is unavailable. 429 is rate limited, with Retry-After: 2.</p>
+  </section>
+
+  <section class="card danger" id="c-ka">
+    <h2>Kill all <span class="pill" id="p-ka">normal</span></h2>
+    <button class="switch" id="s-ka" role="switch" aria-label="Kill all traffic" aria-checked="false"></button>
+    <p>The proxy answers 503 for every proxied host.</p>
+  </section>
+
+  <footer id="foot">Syncing...</footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const post = (p, b) => fetch(p, {method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify(b)}).then(refresh);
+const setPill = (id, text, cls) => { const e = $(id); e.textContent = text; e.className = 'pill ' + (cls || ''); };
+const state = {};
+
+$('s-llm').onclick = () => post('/api/llm', {enabled: $('s-llm').getAttribute('aria-checked') !== 'true'});
+$('s-ka').onclick = () => post('/api/kill_all', {enabled: $('s-ka').getAttribute('aria-checked') !== 'true'});
+document.querySelectorAll('.seg button').forEach(b => b.onclick = () => post('/api/market_data', {mode: b.dataset.m}));
+
+function paint(s) {
+  const llm = s.services.llm, ka = s.kill_all, md = s.market_data_fault;
+  $('s-llm').setAttribute('aria-checked', llm);
+  $('s-ka').setAttribute('aria-checked', ka);
+  setPill('p-llm', llm ? 'allowed' : 'cut', llm ? '' : 'bad');
+  setPill('p-ka', ka ? 'all cut' : 'normal', ka ? 'bad' : '');
+  setPill('p-md', md === 'ok' ? 'ok' : md === 'unavailable' ? '503' : md === 'rate_limited' ? '429' : md, md === 'ok' ? '' : md === 'rate_limited' ? 'warn' : 'bad');
+  document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.m === md));
+  const cls = (bad, warn) => 'link' + (bad ? ' bad' : warn ? ' warn' : '');
+  $('l0').setAttribute('class', cls(ka));
+  $('l1').setAttribute('class', cls(ka || !llm));
+  $('l2').setAttribute('class', cls(md === 'unavailable', md === 'rate_limited'));
+  $('led').className = 'led' + (ka || !llm || md !== 'ok' ? ' bad' : '');
+  $('foot').textContent = (ka || !llm || md !== 'ok') ? 'Something is broken on purpose. Flip it back when you are done.' : 'All services reachable.';
+}
+async function refresh() {
+  try { paint(await (await fetch('/api/state')).json()); }
+  catch (e) { $('foot').textContent = 'Panel cannot reach its API. Retrying...'; }
+}
+refresh(); setInterval(refresh, 3000);
+</script>
+</body>
+</html>

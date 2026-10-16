@@ -1,0 +1,13 @@
+#!/bin/bash
+# ABOUTME: Check script. Fill-in-the-blanks style. The module's offline tests must pass (no LLM needed).
+source /root/.bashrc
+fail() { echo "FAIL: $1"; exit 1; }
+pass() { echo "PASS: $1"; }
+
+cd /root/workshop/modules/01-strands-agent-basics/exercise || fail "Exercise folder is missing."
+
+if ! python -m pytest -q > /tmp/check-01.log 2>&1; then
+    tail -20 /tmp/check-01.log
+    fail "Tests fail. Uncomment the code under TODO 1 and TODO 2 in agent.py."
+fi
+pass "build_agent returns an Agent with the model, prompt and tool"

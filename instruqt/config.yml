@@ -1,0 +1,13 @@
+version: "3"
+containers:
+- name: workshop
+  image: trainwithshubham/durable-finance-research-agent-sandbox:latest
+  shell: /bin/bash
+  memory: 4096
+  ports:
+  - 8233   # Temporal UI
+  - 8080   # code-server, the Editor tab
+  - 5050   # network control panel
+  - 8000   # research desk (test UI)
+secrets:
+- name: TEMPORAL_LITELLM_BROKER_SECRET

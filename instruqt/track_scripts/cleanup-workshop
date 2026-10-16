@@ -1,0 +1,9 @@
+#!/bin/bash
+# ABOUTME: Track-level cleanup. Runs once when the track is torn down.
+# macOS pkill doesn't support alternation. Use one pattern per line.
+set -euo pipefail
+
+pkill -f "worker.py"       || true
+pkill -f "temporal server" || true
+pkill -f "mitmdump"        || true
+pkill -f "uvicorn"         || true

@@ -1,0 +1,16 @@
+#!/bin/bash
+# ABOUTME: Per-challenge setup. Bootstraps if the track setup did not run (Instruqt Preview skips it).
+set -euxo pipefail
+
+/opt/bootstrap-workshop.sh
+set +x  # keep the learner's key out of the script log
+source /root/.bashrc
+set -x
+
+# Start from a clean slate: no worker, panel back to normal.
+pkill -f "worker.py" || true
+
+# Panel back to normal, so a toggle left on in another chapter cannot leak in.
+curl -s -X POST localhost:5050/api/llm -H 'content-type: application/json' -d '{"enabled": true}' || true
+curl -s -X POST localhost:5050/api/kill_all -H 'content-type: application/json' -d '{"enabled": false}' || true
+curl -s -X POST localhost:5050/api/market_data -H 'content-type: application/json' -d '{"mode": "ok"}' || true
