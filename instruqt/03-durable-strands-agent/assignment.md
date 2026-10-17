@@ -20,6 +20,9 @@ notes:
 
     The Strands agent from module 2 moves into a Temporal Workflow.
     Same prompt, same tools. Watch what changes when things break.
+
+    Demo only: the tickers are invented (none of the companies is publicly listed), and every number, filing and headline is invented and not real.
+    Nothing here is financial advice.
 tabs:
 - id: dc0tjsntonlz
   title: Editor
@@ -122,7 +125,7 @@ It does not return a prompt. That blocked terminal is the worker polling for wor
 Click the [button label="Starter" background="#444CE7"](tab-2) terminal.
 
 ```bash,run
-just start "Write a research memo on ACME."
+just start "Write a research memo on TWS."
 ```
 
 ```bash,nocopy
@@ -152,7 +155,7 @@ Replace the id with yours. The Workflow publishes the memo and completes. The fi
 Open the [button label="Network Control Panel" background="#444CE7"](tab-5) tab and cut the **LLM gateway**. Start another memo:
 
 ```bash,run
-just start "Write a research memo on GLBX."
+just start "Write a research memo on KAVERI."
 ```
 
 In the [button label="Temporal UI" background="#444CE7"](tab-4) tab the Workflow stays **Running**. Open the
@@ -219,7 +222,7 @@ One. The worker that ran it is dead, and the new worker replayed the history ins
 Compliance does not always come back. Start a memo with a 30 second approval window:
 
 ```bash,run
-just start-short "Write a research memo on INIT."
+just start-short "Write a research memo on CLOUD."
 ```
 
 Do not approve it. After 30 seconds the Timer fires. In the History tab you will see `TimerStarted`,

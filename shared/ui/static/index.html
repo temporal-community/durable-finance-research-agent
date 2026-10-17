@@ -74,7 +74,7 @@ pre.term::before{content:"output";display:block;font-size:10px;letter-spacing:.1
     <h1>Research Desk<small>Ledger Capital</small></h1>
     <span class="badge" id="variant">exercise</span>
   </header>
-  <div class="notice"><b>SAMPLE DATA</b> &nbsp;Fictional companies (ACME, GLBX, INIT). Not financial advice.</div>
+  <div class="notice"><b>DEMO ONLY</b> &nbsp;Invented tickers (TWS, KAVERI, CLOUD): none of these companies is publicly listed. All numbers, filings and news are invented. Not financial advice.</div>
 
   <div class="mods" role="group" aria-label="Module">
     <button class="mod" id="t1" aria-pressed="true" onclick="pick(1)"><i>01</i><b>Basic agent</b><span>Model, prompt, one tool</span></button>
@@ -100,8 +100,8 @@ pre.term::before{content:"output";display:block;font-size:10px;letter-spacing:.1
 const $ = id => document.getElementById(id);
 const PROMPTS = {
   1: ['Price moved from 98.2 to 112.4. What is the percent change?'],
-  2: ['Write a research memo on ACME.', 'Write a research memo on GLBX.', 'Write a research memo on INIT.', 'Write a research memo on ZZZZ.'],
-  3: ['Write a research memo on ACME.', 'Write a research memo on GLBX.', 'Write a research memo on INIT.', 'Write a research memo on ZZZZ.']
+  2: ['Write a research memo on TWS.', 'Write a research memo on KAVERI.', 'Write a research memo on CLOUD.', 'Write a research memo on ZZZZ.'],
+  3: ['Write a research memo on TWS.', 'Write a research memo on KAVERI.', 'Write a research memo on CLOUD.', 'Write a research memo on ZZZZ.']
 };
 const HINTS = {1: 'Runs your module 1 agent once. Cut the LLM in the Network Control Panel and run it again.',
   2: 'Runs your module 2 agent once. It calls three data tools, then writes the memo.',

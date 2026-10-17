@@ -1,7 +1,7 @@
 # Self-paced Docker path. Same image as Instruqt, built for your machine's architecture.
 # Your repo is mounted at /root/workshop, so you edit locally and run inside the container.
 #   just up-docker                       # build and start the stack
-#   docker compose exec workshop bash    # then: just m1 "hi"   just worker   just start "memo on ACME"
+#   docker compose exec workshop bash    # then: just m1 "hi"   just worker   just start "memo on TWS"
 # Needs .env (copy .env.example). Do not run this and `just up` at the same time: they share ports and .run/.
 services:
   workshop:

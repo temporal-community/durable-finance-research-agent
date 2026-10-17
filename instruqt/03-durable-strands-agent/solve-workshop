@@ -15,7 +15,7 @@ nohup python worker.py > /tmp/worker-solve.log 2>&1 &
 WORKER_PID=$!
 sleep 8
 
-WF=$(python start.py "Write a research memo on ACME." | awk '/^Started/ {print $2}')
+WF=$(python start.py "Write a research memo on TWS." | awk '/^Started/ {print $2}')
 
 # Wait for the memo to reach review, approve it, wait for completion.
 REVIEWED=""

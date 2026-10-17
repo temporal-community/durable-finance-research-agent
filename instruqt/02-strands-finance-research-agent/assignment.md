@@ -18,8 +18,8 @@ notes:
   contents: |-
     # Sample data only
 
-    The tickers are fictional: ACME, GLBX and INIT. The numbers are made up.
-    Nothing here is financial advice.
+    This workshop is for demo purposes only. The tickers (TWS, KAVERI and CLOUD) are invented: none of the three companies is publicly
+    listed. Every number, filing and headline is invented and is not real market data. Nothing here is financial advice.
 tabs:
 - id: vhgpzaiuqsgr
   title: Editor
@@ -81,7 +81,7 @@ just test 2
 ## Run It
 
 ```bash,run
-just m2 "Write a research memo on ACME."
+just m2 "Write a research memo on TWS."
 ```
 
 Watch the output. The agent announces each tool call before it writes anything:
@@ -94,10 +94,10 @@ Tool #3: get_news
 ...
 ## Sources
 - get_quote, get_filings, get_news
-Sample data. Not financial advice.
+Demo only. Invented sample data, not real. Not financial advice.
 ```
 
-Try `GLBX`, then `INIT`. Then ask for a ticker that does not exist:
+Try `KAVERI`, then `CLOUD`. Then ask for a ticker that does not exist:
 
 ```bash,run
 just m2 "Write a research memo on ZZZZ."

@@ -26,12 +26,12 @@ class FakeModel(Model):
         yield {"messageStart": {"role": "assistant"}}
         if not used_tool:
             yield {"contentBlockStart": {"start": {"toolUse": {"toolUseId": "t1", "name": "get_quote"}}}}
-            yield {"contentBlockDelta": {"delta": {"toolUse": {"input": json.dumps({"ticker": "ACME"})}}}}
+            yield {"contentBlockDelta": {"delta": {"toolUse": {"input": json.dumps({"ticker": "TWS"})}}}}
             yield {"contentBlockStop": {}}
             yield {"messageStop": {"stopReason": "tool_use"}}
         else:
             yield {"contentBlockStart": {"start": {}}}
-            yield {"contentBlockDelta": {"delta": {"text": "## Summary\nACME memo. Sample data. Not financial advice."}}}
+            yield {"contentBlockDelta": {"delta": {"text": "## Summary\nTWS memo. Demo only. Invented sample data, not real. Not financial advice."}}}
             yield {"contentBlockStop": {}}
             yield {"messageStop": {"stopReason": "end_turn"}}
         yield {"metadata": {"usage": {"inputTokens": 1, "outputTokens": 1, "totalTokens": 2}, "metrics": {"latencyMs": 1}}}

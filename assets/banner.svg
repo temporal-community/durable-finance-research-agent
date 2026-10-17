@@ -26,5 +26,5 @@
   <text x="60" y="258" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="58" font-weight="700" fill="#FFFFFF">Research Agent</text>
   <rect x="60" y="282" width="120" height="5" rx="2.5" fill="url(#accent)"/>
   <text x="60" y="326" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="24" fill="#C9D1FF">Strands Agents + Temporal. Survive crashes, flaky APIs and slow humans.</text>
-  <text x="60" y="360" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#8A93D6">A hands-on workshop. Sample data only. Not financial advice.</text>
+  <text x="60" y="360" font-family="Inter, -apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#8A93D6">Demo workshop. All data is invented, not real. Not financial advice.</text>
 </svg>

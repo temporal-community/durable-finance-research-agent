@@ -17,8 +17,8 @@ notes:
   contents: |-
     # The desk
 
-    Ledger Capital runs a fictional research desk. All data here is sample data.
-    Nothing you build is financial advice.
+    Ledger Capital runs a fictional research desk. This workshop is for demo purposes only: all data is invented sample
+    data, not real. Nothing you build is financial advice.
 tabs:
 - id: jxpcxd2vnks0
   title: Editor

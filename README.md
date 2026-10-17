@@ -23,7 +23,9 @@ A hands-on [Temporal](https://temporal.io) workshop. You build a finance researc
 for a human to approve it. Then you make it survive crashes, flaky APIs and slow humans by running it on Temporal.
 
 > [!IMPORTANT]
-> **Sample data only.** Every ticker (ACME, GLBX, INIT), price, filing and headline is made up.
+> **For demo purposes only. None of this data is real.** The three demo tickers (TWS for TrainWithShubham, KAVERI for
+> Kaveri Labs, CLOUD for CloudAdhar) are not publicly listed companies. The tickers are invented, and every price, ratio,
+> filing and headline is invented too. Do not use any output for investment decisions.
 > Nothing in this repo is financial advice.
 
 ## What you will learn
@@ -105,9 +107,9 @@ Run the modules:
 
 ```bash
 just m1 "Price moved from 98.2 to 112.4. What is the percent change?"   # module 1
-just m2 "Write a research memo on ACME."                                # module 2
+just m2 "Write a research memo on TWS."                                # module 2
 just worker                                                             # module 3, terminal 1
-just start "Write a research memo on ACME."                             # module 3, terminal 2
+just start "Write a research memo on TWS."                             # module 3, terminal 2
 just approve <workflow-id>                                              # or use the Research Desk UI
 just test 3                                                             # offline tests, no key needed
 ```
@@ -215,4 +217,4 @@ Issues and pull requests are welcome. Ask questions in the [Temporal community S
 
 ## License
 
-[MIT](LICENSE). All market data, filings and news in this repository are fictional sample data.
+[MIT](LICENSE). All market data, filings and news in this repository are invented sample data. The companies are not publicly listed and the tickers are invented.

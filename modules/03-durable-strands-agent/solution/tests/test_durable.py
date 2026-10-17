@@ -78,7 +78,7 @@ async def _run(env, tmp_path, monkeypatch, body, quote=None):
         activities=[quote or fake_quote, fake_filings, fake_news, activities.publish_memo],
     ):
         handle = await client.start_workflow(
-            ResearchWorkflow.run, args=["memo on ACME", 3600], id=f"wf-{uuid.uuid4().hex[:6]}", task_queue=tq
+            ResearchWorkflow.run, args=["memo on TWS", 3600], id=f"wf-{uuid.uuid4().hex[:6]}", task_queue=tq
         )
         return await body(handle)
 

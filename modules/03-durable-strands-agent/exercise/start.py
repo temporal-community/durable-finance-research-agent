@@ -1,4 +1,4 @@
-"""Start a research Workflow: uv run python start.py "Write a memo on GLBX" """
+"""Start a research Workflow: uv run python start.py "Write a memo on KAVERI" """
 import argparse
 import asyncio
 import os
@@ -15,7 +15,7 @@ async def main() -> None:
     ap.add_argument("prompt", nargs="*")
     ap.add_argument("--approval-timeout", type=int, default=DEFAULT_APPROVAL_TIMEOUT_SECONDS, help="seconds")
     a = ap.parse_args()
-    prompt = " ".join(a.prompt) or "Write a research memo on ACME."
+    prompt = " ".join(a.prompt) or "Write a research memo on TWS."
     client = await Client.connect(os.environ.get("TEMPORAL_ADDRESS", "localhost:7233"))
     wf_id = f"research-{uuid.uuid4().hex[:8]}"
     await client.start_workflow(

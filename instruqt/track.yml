@@ -5,7 +5,8 @@ teaser: Build a finance research agent with Strands, then make it survive crashe
   flaky APIs and a slow human.
 description: |-
   A research agent fans out to market data, filings and news, drafts a memo, and waits for a person to approve it.
-  All data is sample data. Nothing here is financial advice.
+  For demo purposes only. The tickers are invented (the companies are not publicly listed) and all data is invented sample data, not real. Nothing here is
+  financial advice.
 
   1. Build a simple Strands agent that talks to an LLM through a gateway.
   2. Give it finance tools and a research brief. Break the network and watch it fail.
